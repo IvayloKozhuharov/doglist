@@ -5,13 +5,13 @@
     <title>dabbaronni</title>
   </head>
   <body>
-    <h1>Crate a new dog</h1>
-    <form action={{action}} method="post">
+    <h1>Edit this dog</h1>
+    <form action="/dogs/{{id}}?_method=PUT" method="post">
       <label for="dogName"></label>
       <input id="dogName" type="text" name="name" value="{{name}}">
       <label for="dogAge"></label>
       <input id="dogAge" type="text" name="age" value="{{age}}">
-      <input id="submitButton" type="submit" value="Create New Dog">
+      <input id="submitButton" type="submit" value="Save Changes">
     </form>
   </body>
 </html>

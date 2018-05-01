@@ -6,6 +6,7 @@ const hbs = require('hbs');
 const path = require('path');
 const _ = require('lodash');
 const {Dog} = require('./models/dog.js');
+const methodOverride = require('method-override');
 
 const app = express();
 
@@ -13,6 +14,7 @@ const app = express();
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, '../app/views'))
 hbs.registerPartials(path.join(__dirname, '../app/views/partials'))
+app.use(methodOverride('_method'));
 
 //Setup
 const port = process.env.PORT || 3000;
@@ -80,6 +82,7 @@ app.post('/dogs', (req, res) => {
     .catch(e => {
       res.status(400).send();
     })
+    console.log("Created");
     res.redirect('/dogs')
 })
 
@@ -97,11 +100,10 @@ app.get('/dogs/:id', (req,res) => {
 app.get('/dogs/:id/edit', (req, res) => {
   Dog.findById(req.params.id)
   .then((dog) => {
-    res.render('./dogs/new.hbs', {
+    res.render('./dogs/edit.hbs', {
       name: dog.name,
       age: dog.age,
-      action: `/dogs/${dog.id}`,
-      method: "put"
+      id: dog.id
     });
   })
   .catch((e) => {
@@ -110,8 +112,30 @@ app.get('/dogs/:id/edit', (req, res) => {
 })
 
 app.put('/dogs/:id', (req, res) => {
-  Dog.findByIdAndUpdate(req.params.id, )//https://coursework.vschool.io/mongoose-crud/
+  const id = req.params.id
+  // Dog.findOneAndUpdate({_id: id, _creator: req.body.id}, {
+  //   name: req.body.name,
+  //   age: req.body.age
+  // }, {new: true}).then(dog => {
+  //   console.log("dog:", dog);
+  // }).catch(e => {
+  //   console.log("error from PUT");
+  // })
+  Dog.findByIdAndUpdate(id, {
+    name: req.body.name,
+    age: req.body.age
+  }, {new: true}).then(dog => {
+    console.log("dog:", dog);
+  }).catch(e => {
+    console.log("error from PUT");
+  })
 })
+
+// (results) => {
+//   console.log(results);
+// })//https://coursework.vschool.io/mongoose-crud/
+// console.log("Edited");
+// app.redirect('/dogs');
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
