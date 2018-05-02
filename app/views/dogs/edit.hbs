@@ -13,5 +13,8 @@
       <input id="dogAge" type="text" name="age" value="{{age}}">
       <input id="submitButton" type="submit" value="Save Changes">
     </form>
+    <form action="/dogs/{{id}}?_method=DELETE" method="post">
+      <input id="deleteButton" type="submit" value="Delete Dog">
+    </form>
   </body>
 </html>

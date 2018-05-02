@@ -112,15 +112,7 @@ app.get('/dogs/:id/edit', (req, res) => {
 })
 
 app.put('/dogs/:id', (req, res) => {
-  const id = req.params.id
-  // Dog.findOneAndUpdate({_id: id, _creator: req.body.id}, {
-  //   name: req.body.name,
-  //   age: req.body.age
-  // }, {new: true}).then(dog => {
-  //   console.log("dog:", dog);
-  // }).catch(e => {
-  //   console.log("error from PUT");
-  // })
+  const id = req.params.id;
   Dog.findByIdAndUpdate(id, {
     name: req.body.name,
     age: req.body.age
@@ -129,6 +121,19 @@ app.put('/dogs/:id', (req, res) => {
   }).catch(e => {
     console.log("error from PUT");
   })
+  res.redirect('/dogs');
+})
+
+app.delete('/dogs/:id', (req, res) => {
+  const id = req.params.id;
+  Dog.findByIdAndRemove(id)
+    .then(result => {
+      console.log("result: " + result);
+    })
+    .catch(e => {
+      console.log("Could not find the dog you wanted to delete");
+    })
+    res.redirect('/dogs');
 })
 
 // (results) => {
