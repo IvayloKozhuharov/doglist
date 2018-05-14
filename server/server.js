@@ -33,13 +33,14 @@ app.use(bodyParser.urlencoded({extended:true}))
 
 app.get('/', (req, res) => {
   res.redirect('/dogs')
-  // res.send('GET /')
 })
 
 app.get('/dogs', (req, res) => {
   Dog.find()
     .then(dogs => {
-      res.send(dogs)
+      res.render('home.hbs', {
+        dogs: dogs
+      });
     })
     .catch(e => {
       res.status(404).send()
@@ -56,21 +57,6 @@ app.get('/dogs/new', (req, res) => {
 })
 
 app.post('/dogs', (req, res) => {
-  // console.log(req.body);
-  // if (req.body.name || !req.body.age) {
-  //   res.status(400).send()
-  // }
-  // const dog = new Dog({
-  //   name: "Jasper",
-  //   age: 2
-  // })
-  // dog.save()
-  //   .then(dog => {
-  //     res.send(dog);
-  //   })
-  //   .catch(e => {
-  //     res.status(400).send();
-  //   })
   let dog = new Dog({
     name: req.body.name,
     age: req.body.age
@@ -136,17 +122,14 @@ app.delete('/dogs/:id', (req, res) => {
     res.redirect('/dogs');
 })
 
-// (results) => {
-//   console.log(results);
-// })//https://coursework.vschool.io/mongoose-crud/
-// console.log("Edited");
-// app.redirect('/dogs');
+app.post('/routerFind', (req, res) => {
+  res.redirect(`/dogs/${req.body.id}`);
+})
+
+app.post('/routerEdit', (req, res) => {
+  res.redirect(`/dogs/${req.body.id}/edit`)t ;
+})
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 })
-
-// {
-// 	"name": "Testboi"
-// 	"age": "3"
-// }
