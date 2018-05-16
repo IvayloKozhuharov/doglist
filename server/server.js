@@ -69,14 +69,16 @@ app.post('/dogs', (req, res) => {
       res.status(400).send();
     })
     console.log("Created");
-    res.redirect('/dogs')
+    res.redirect('/')
 })
 
 app.get('/dogs/:id', (req,res) => {
   console.log(req.params.id);
   Dog.findById(req.params.id)
   .then((dog) => {
-    res.send(dog);
+    res.render('./dogs/show.hbs', {
+      dog
+    });
   })
   .catch((e) => {
     res.send("Dog does not exist");
@@ -107,7 +109,9 @@ app.put('/dogs/:id', (req, res) => {
   }).catch(e => {
     console.log("error from PUT");
   })
-  res.redirect('/dogs');
+  .then(result => {
+    res.redirect('/dogs');
+  })
 })
 
 app.delete('/dogs/:id', (req, res) => {
@@ -119,7 +123,9 @@ app.delete('/dogs/:id', (req, res) => {
     .catch(e => {
       console.log("Could not find the dog you wanted to delete");
     })
-    res.redirect('/dogs');
+    .then(result => {
+      res.redirect('/dogs');
+    })
 })
 
 app.post('/routerFind', (req, res) => {
@@ -127,7 +133,7 @@ app.post('/routerFind', (req, res) => {
 })
 
 app.post('/routerEdit', (req, res) => {
-  res.redirect(`/dogs/${req.body.id}/edit`)t ;
+  res.redirect(`/dogs/${req.body.id}/edit`) ;
 })
 
 app.listen(port, () => {
